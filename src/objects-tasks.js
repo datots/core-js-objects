@@ -32,7 +32,15 @@ function shallowCopy(obj) {
  *    mergeObjects([{a: 1, b: 2}, {b: 3, c: 5}]) => {a: 1, b: 5, c: 5}
  *    mergeObjects([]) => {}
  */
-function mergeObjects(objects) {}
+function mergeObjects(objects) {
+  return objects.reduce((acc, obj) => {
+    const resultObj = { ...acc };
+    Object.entries(obj).forEach(([key, value]) => {
+      resultObj[key] = (resultObj[key] || 0) + value;
+    });
+    return resultObj;
+  }, {});
+}
 
 /**
  * Removes a properties from an object.
@@ -77,8 +85,9 @@ function compareObjects(obj1, obj2) {
   if (Object.keys(obj1).length !== Object.keys(obj2).length) {
     return false;
   }
+
   return Object.keys(obj1).every((key) => {
-    if (Object.prototype.hasOwnProperty.call(obj2, key)) {
+    if (!Object.prototype.hasOwnProperty.call(obj2, key)) {
       return false;
     }
     const val1 = obj1[key];
